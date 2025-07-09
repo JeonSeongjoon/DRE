@@ -35,6 +35,7 @@ base_model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.float16,
 )
 
+
 #tokenizer
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 tokenizer.pad_token = tokenizer.eos_token

@@ -3,6 +3,7 @@ from peft import LoraConfig
 import torch
 
 
+#8bits quantization config
 bnbConfig = BitsAndBytesConfig(
     load_in_8bit=True,
     bnb_8bit_compute_dtype=torch.float16,
@@ -11,6 +12,7 @@ bnbConfig = BitsAndBytesConfig(
 )
 
 
+#LoRA config
 LoRAConfig = LoraConfig(
     r=8,                     # LoRA의 랭크
     lora_alpha=32,           # LoRA의 알파 파라미터
@@ -21,6 +23,7 @@ LoRAConfig = LoraConfig(
 )
 
 
+#Trainer config
 trainerConfig = TrainingArguments(
     output_dir="./ouput",
     num_train_epochs=3,                  # 학습 에폭 수
@@ -47,7 +50,7 @@ trainerConfig = TrainingArguments(
 
 
 '''
-#8bits quantization config
+
 class bnbConfig(BitsAndBytesConfig):
     def __init__(self,
                  load_in_8bit=True,
@@ -61,7 +64,7 @@ class bnbConfig(BitsAndBytesConfig):
                          bnb_8bit_use_double_quant = bnb_8bit_use_double_quant)
 
 
-#LoRA config
+
 class LoRAConfig(LoraConfig):
     def __init__(self,
                  r=8,                                    # LoRA의 랭크
@@ -79,7 +82,6 @@ class LoRAConfig(LoraConfig):
                          task_type=task_type)
 
 
-#Trainer config
 class trainerConfig(TrainingArguments):
     def __init__(self,
                  output_dir=None,                     #You should input the output directory

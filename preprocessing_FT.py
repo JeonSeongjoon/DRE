@@ -19,7 +19,7 @@ def loadnSampling(file_path, num_samples=None):
 
 
 
-def prerprocessing(examples, prompt, tokenizer):
+def preprocessing(examples, prompt, tokenizer):
     inputs = []
     targets = []
 

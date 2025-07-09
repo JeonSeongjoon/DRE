@@ -55,7 +55,7 @@ def preprocessing(examples, prompt, tokenizer):
             targets,
             padding="max_length",
             truncation=True,
-            max_length=512,
+            max_length=1024,
             return_tensors="pt"
         )["input_ids"]
 

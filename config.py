@@ -44,7 +44,3 @@ trainerConfig = TrainingArguments(
     push_to_hub=False,                   # 허깅페이스 허브에 모델 업로드 (False)
     report_to="none",                    # 로그 보고 대상
 )
-
-
-
-   

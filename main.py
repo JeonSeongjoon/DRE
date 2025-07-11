@@ -10,10 +10,11 @@ from transformers import (
 from peft import get_peft_model, prepare_model_for_kbit_training
 from trl import SFTTrainer
 
-###
 from config import bnbConfig, LoRAConfig, trainerConfig
 from preprocessing_FT import loadnSampling, preprocessing
 
+
+###################################################################################################
 
 #path info
 MODEL_NAME = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
@@ -23,9 +24,11 @@ DATASET_PATH = "./data/AI_hub_conversation_data(session).xlsx"
 
 #prompt
 PROMPT = '''
-You are a competent translator. When conversation data is input, translate from English to Korean in a natural, colloquial way.
-Only output the translation of the input data and do not include any other contents.'''   #zero-shot
+You are a competent translator. Translate the following english dialogue into Korean.
+You should output the translation result of the input data. Do not include any other contents.'''   #zero-shot
 
+
+####################################################################################################
 
 
 #Model
@@ -77,7 +80,7 @@ trainer.model.save_pretrained(LORA_DIR)
 ##########################################Implementation###############################################
 
 
-def en2ko_simple(context):
+def translation(context):
     with torch.no_grad():
         prompt = f"Translate the following English text to Korean:\n\nEnglish: {context}\n\nKorean:"
 
@@ -122,6 +125,7 @@ B : They are 3$ each.
 A : Too expansive... Any discount?
 B : No, they are already the cheapest in this town.
 A : Okay, then I'll take it.
+
 '''
 
 test_inp2 ='''
@@ -130,6 +134,7 @@ G : Its on the green street.
 B : How do I get there?
 G : Go straight three blocks and turn right.
 B : Thank you so much.
+
 '''
 
 test_inp3 ='''
@@ -138,15 +143,32 @@ J: Well, you forgot? How did that happen?
 I: I was sick last week, and I just haven't been myself for the last couple of weeks.
 J: Hmm... OK, I'll give you another chance this time. You can either take a make-up exam or write a research paper.
 I: Thank you very much, professor. I'll take the make-up exam.
+
 '''
 
-sample_li = [test_inp1, test_inp2, test_inp3]
+
+input_li = [test_inp1, test_inp2, test_inp3]
+gen_li = []
 
 
 #print
-for index, test_input in enumerate(sample_li):
+print("\n파인튜닝 완료 후 테스트 :")
+
+for index, test_input in enumerate(input_li):
+  
+  gen = translation(test_input)
+  gen_li.append(gen)
+
   print(f"#{index}")
-  print("\n파인튜닝 완료 후 테스트:")
-  print(f"입력: {test_input}")
-  print(f"번역 결과: {en2ko_simple(test_input)}")
+  print(f"input : {test_input}")
+  print(f"translation result : {gen}")
   print('\n'*2)
+
+
+#result in excel format
+res_dict = {}
+res_dict['en'] = input_li
+res_dict['ko'] = gen_li
+
+result = pd.DataFrame(res_dict)
+result.to_excel('DRE_translation_result(test).xlsx')

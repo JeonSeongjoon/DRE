@@ -10,7 +10,7 @@ def loadnSampling(file_path, num_samples=None):
         dataset = load_dataset('json', data_files=file_path)
         df = dataset['train'].to_pandas()
     else:
-        raise ValueError("지원되지 않는 파일 형식입니다. Excel 또는 JSON 파일을 사용하세요.")
+        raise ValueError("Unvalid data format, please check the file format agian.")
 
     if num_samples and num_samples < len(df):
         df = df.sample(num_samples, random_state=42)

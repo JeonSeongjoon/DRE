@@ -15,12 +15,13 @@ from config import bnbConfig, LoRAConfig, trainerConfig
 from preprocessing_FT import loadnSampling, preprocessing
 
 
-#basic info
+#path info
 MODEL_NAME = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
 OUTPUT_DIR = "./ouput"
 LORA_DIR = "./LoRA"                    #./ 현재 폴더를 나타낸다, .는 현재 위치를 의미함
-DATASET_PATH = "./data/AI_hub_preprocessed.xlsx"
+DATASET_PATH = "./data/AI_hub_conversation_data(session).xlsx"
 
+#prompt
 PROMPT = '''
 You are a competent translator. When conversation data is input, translate from English to Korean in a natural, colloquial way.
 Only output the translation of the input data and do not include any other contents.'''   #zero-shot
@@ -34,7 +35,6 @@ base_model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",
     torch_dtype=torch.float16,
 )
-
 
 #tokenizer
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)

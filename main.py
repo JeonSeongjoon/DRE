@@ -39,7 +39,7 @@ base_model = AutoModelForCausalLM.from_pretrained(
 #tokenizer
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 tokenizer.pad_token = tokenizer.eos_token
-tokenizer.padding_side = "right"
+tokenizer.padding_side = "left"
 
 #LoRA
 model = prepare_model_for_kbit_training(base_model)
@@ -49,7 +49,7 @@ model = get_peft_model(model, LoRAConfig)  # LoRA 적용   #model.print_trainabl
 
 
 #FT_data loading & sampling
-num_samples = 5000  
+num_samples = 3000  
 dataset = loadnSampling(DATASET_PATH, num_samples=num_samples)
 
 #FT_preprocessing

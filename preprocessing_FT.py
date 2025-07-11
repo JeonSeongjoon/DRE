@@ -1,8 +1,26 @@
 import pandas as pd
 from datasets import Dataset, load_dataset
 
-
+#session
+'''
 def loadnSampling(file_path, num_samples=None):
+
+    if file_path.endswith('.xlsx'):
+        df = pd.read_excel(file_path)
+    elif file_path.endswith('.json'):
+        dataset = load_dataset('json', data_files=file_path)
+        df = dataset['train'].to_pandas()
+    else:
+        raise ValueError("Unvalid data format, please check the file format agian.")
+
+    if num_samples and num_samples < len(df):
+        df = df.sample(num_samples, random_state=42)
+
+    return df'''
+
+
+#single turn - just randomly select 3000 turns
+def loadnSampling(file_path, num_samples=3000):
 
     if file_path.endswith('.xlsx'):
         df = pd.read_excel(file_path)

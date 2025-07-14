@@ -42,7 +42,7 @@ base_model = AutoModelForCausalLM.from_pretrained(
 #tokenizer
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 tokenizer.pad_token = tokenizer.eos_token
-tokenizer.padding_side = "left"
+tokenizer.padding_side = "right"
 
 #LoRA
 model = prepare_model_for_kbit_training(base_model)
@@ -82,7 +82,7 @@ trainer.model.save_pretrained(LORA_DIR)
 
 def translation(context):
     with torch.no_grad():
-        prompt = f"Translate the following English text to Korean:\n\nEnglish: {context}\n\nKorean:"
+        prompt = f"Translate the following English text to Korean:\n\nEnglish: {context}\n\nKorean: "
 
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 
@@ -90,7 +90,7 @@ def translation(context):
                 tokenizer.eos_token_id,  # 기본 EOS 토큰
                 #tokenizer.convert_tokens_to_ids("."),  # 마침표
                 #tokenizer.convert_tokens_to_ids("。"),  # 동아시아 마침표
-                tokenizer.convert_tokens_to_ids("\n\n")  # 빈 줄
+                tokenizer.convert_tokens_to_ids("[END]")  # 빈 줄
             ]
 
         terminators = [t for t in terminators if t is not None and t >= 0]
@@ -125,7 +125,6 @@ B : They are 3$ each.
 A : Too expansive... Any discount?
 B : No, they are already the cheapest in this town.
 A : Okay, then I'll take it.
-
 '''
 
 test_inp2 ='''
@@ -134,7 +133,6 @@ G : Its on the green street.
 B : How do I get there?
 G : Go straight three blocks and turn right.
 B : Thank you so much.
-
 '''
 
 test_inp3 ='''
@@ -143,7 +141,6 @@ J: Well, you forgot? How did that happen?
 I: I was sick last week, and I just haven't been myself for the last couple of weeks.
 J: Hmm... OK, I'll give you another chance this time. You can either take a make-up exam or write a research paper.
 I: Thank you very much, professor. I'll take the make-up exam.
-
 '''
 
 

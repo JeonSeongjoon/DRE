@@ -7,7 +7,7 @@ from transformers import (
     AutoTokenizer
 )
 
-from peft import get_peft_model, prepare_model_for_kbit_training
+from peft import PeftModel, get_peft_model, prepare_model_for_kbit_training
 from trl import SFTTrainer
 
 from config import bnbConfig, LoRAConfig, trainerConfig
@@ -76,6 +76,13 @@ trainer.train()
 trainer.model.save_pretrained(LORA_DIR)
 
 
+#######################################################################################################
+
+model = PeftModel.from_pretrained(
+    base_model,
+    LORA_DIR,
+    device_map='auto'
+)
 
 ##########################################Implementation###############################################
 

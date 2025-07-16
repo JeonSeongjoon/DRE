@@ -97,7 +97,7 @@ def translation(context):
                 tokenizer.eos_token_id,  # 기본 EOS 토큰
                 #tokenizer.convert_tokens_to_ids("."),  # 마침표
                 #tokenizer.convert_tokens_to_ids("。"),  # 동아시아 마침표
-                tokenizer.convert_tokens_to_ids("[END]")  # 빈 줄
+                tokenizer.convert_tokens_to_ids("\n\n")  # 빈 줄
             ]
 
         terminators = [t for t in terminators if t is not None and t >= 0]
@@ -132,6 +132,7 @@ B : They are 3$ each.
 A : Too expansive... Any discount?
 B : No, they are already the cheapest in this town.
 A : Okay, then I'll take it.
+
 '''
 
 test_inp2 ='''
@@ -140,6 +141,7 @@ G : Its on the green street.
 B : How do I get there?
 G : Go straight three blocks and turn right.
 B : Thank you so much.
+
 '''
 
 test_inp3 ='''
@@ -148,6 +150,7 @@ J: Well, you forgot? How did that happen?
 I: I was sick last week, and I just haven't been myself for the last couple of weeks.
 J: Hmm... OK, I'll give you another chance this time. You can either take a make-up exam or write a research paper.
 I: Thank you very much, professor. I'll take the make-up exam.
+
 '''
 
 

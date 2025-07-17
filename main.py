@@ -98,7 +98,7 @@ def translation(context):
                 tokenizer.eos_token_id,  # 기본 EOS 토큰
                 #tokenizer.convert_tokens_to_ids("."),  # 마침표
                 #tokenizer.convert_tokens_to_ids("。"),  # 동아시아 마침표
-                #tokenizer.convert_tokens_to_ids("")  # 빈 줄
+                #tokenizer.convert_tokens_to_ids("\n\n")  # 빈 줄
             ]
 
         terminators = [t for t in terminators if t is not None and t >= 0]

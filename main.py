@@ -21,6 +21,7 @@ MODEL_NAME = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
 OUTPUT_DIR = "./ouput"
 LORA_DIR = "./LoRA"                    #./ 현재 폴더를 나타낸다, .는 현재 위치를 의미함
 DATASET_PATH = "./data/AI_hub_conversation_data(session).xlsx"
+FILE_VER = 'session'
 
 #prompt
 PROMPT = '''
@@ -178,4 +179,4 @@ res_dict['en'] = input_li
 res_dict['ko'] = gen_li
 
 result = pd.DataFrame(res_dict)
-result.to_excel('DRE_translation_result(test).xlsx')
+result.to_excel(f'DRE_translation_result({FILE_VER}).xlsx')

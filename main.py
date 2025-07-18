@@ -18,8 +18,8 @@ from preprocessing_FT import loadnSampling, preprocessing
 
 #path info
 MODEL_NAME = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
-OUTPUT_DIR = "./ouput"
-LORA_DIR = "./LoRA"                    #./ 현재 폴더를 나타낸다, .는 현재 위치를 의미함
+OUTPUT_DIR = "./ouput"                                          
+LORA_DIR = "./LoRA"                   
 DATASET_PATH = "./data/AI_hub_conversation_data(session).xlsx"
 FILE_VER = 'session'
 
@@ -42,13 +42,12 @@ base_model = AutoModelForCausalLM.from_pretrained(
 
 #tokenizer
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-tokenizer.pad_token = tokenizer.eos_token
+tokenizer.pad_token_id = tokenizer.eos_token_id
 tokenizer.padding_side = "right"
 
 #LoRA
 model = prepare_model_for_kbit_training(base_model)
-model = get_peft_model(model, LoRAConfig)  # LoRA 적용   #model.print_trainable_parameters()
-
+model = get_peft_model(model, LoRAConfig)  
 
 
 
@@ -90,29 +89,20 @@ model = PeftModel.from_pretrained(
 
 def translation(context):
     with torch.no_grad():
-        prompt = f"Translate the following English text to Korean:\n\nEnglish: {context}\n\nKorean: "
+        prompt = f"Translate the following English text to Korean. \n\nEnglish: {context}\n\nKorean: "
 
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-
-        terminators = [
-                tokenizer.eos_token_id,  # 기본 EOS 토큰
-                #tokenizer.convert_tokens_to_ids("."),  # 마침표
-                #tokenizer.convert_tokens_to_ids("。"),  # 동아시아 마침표
-                #tokenizer.convert_tokens_to_ids("\n\n")  # 빈 줄
-            ]
-
-        terminators = [t for t in terminators if t is not None and t >= 0]
 
         output = model.generate(
                 **inputs,
                 max_new_tokens=512,
                 top_p=0.9,
                 top_k=50,
-                temperature=0.1,
+                temperature=0.3,
+                #repitition_penalty=1.2,
                 do_sample=True,
-                eos_token_id=terminators if terminators else None,  # 종료 토큰 추가
-                #early_stopping=True  # 종료 토큰을 만나면 일찍 중단
-            )
+                eos_token_id=tokenizer.eos_token_id
+                )
 
         full_output = tokenizer.decode(output[0], skip_special_tokens=True)
 
@@ -133,7 +123,6 @@ B : They are 3$ each.
 A : Too expansive... Any discount?
 B : No, they are already the cheapest in this town.
 A : Okay, then I'll take it.
-
 '''
 
 test_inp2 ='''
@@ -142,7 +131,6 @@ G : Its on the green street.
 B : How do I get there?
 G : Go straight three blocks and turn right.
 B : Thank you so much.
-
 '''
 
 test_inp3 ='''
@@ -151,7 +139,6 @@ J: Well, you forgot? How did that happen?
 I: I was sick last week, and I just haven't been myself for the last couple of weeks.
 J: Hmm... OK, I'll give you another chance this time. You can either take a make-up exam or write a research paper.
 I: Thank you very much, professor. I'll take the make-up exam.
-
 '''
 
 

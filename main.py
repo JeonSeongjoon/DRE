@@ -20,8 +20,8 @@ from preprocessing_FT import loadnSampling, preprocessing
 MODEL_NAME = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
 OUTPUT_DIR = "./ouput"                                          
 LORA_DIR = "./LoRA"                   
-DATASET_PATH = "./data/AI_hub_conversation_data(session).xlsx"
-FILE_VER = 'session'
+DATASET_PATH = "./data/AI_hub_conversation_data(single_turn).xlsx"
+FILE_VER = 'single_turn'
 
 #prompt
 PROMPT = '''
@@ -52,7 +52,7 @@ model = get_peft_model(model, LoRAConfig)
 
 
 #FT_data loading & sampling
-num_samples = 3000  
+num_samples = 100 #3000 
 dataset = loadnSampling(DATASET_PATH, num_samples=num_samples)
 
 #FT_preprocessing
@@ -76,16 +76,7 @@ trainer.train()
 trainer.model.save_pretrained(LORA_DIR)
 
 
-#######################################################################################################
-
-model = PeftModel.from_pretrained(
-    base_model,
-    LORA_DIR,
-    device_map='auto'
-)
-
 ##########################################Implementation###############################################
-
 
 def translation(context):
     with torch.no_grad():

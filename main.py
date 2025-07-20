@@ -117,19 +117,19 @@ A : Okay, then I'll take it.
 '''
 
 test_inp2 ='''
-B : Excuse me. Where is the history Museum?
-G : Its on the green street.
-B : How do I get there?
-G : Go straight three blocks and turn right.
-B : Thank you so much.
+A : Excuse me. Where is the history Museum?
+B : Its on the green street.
+A : How do I get there?
+B : Go straight three blocks and turn right.
+A : Thank you so much.
 '''
 
 test_inp3 ='''
-I: Professor, I'm so sorry, but I completely forgot about the exam date. Is there anything I can do?
-J: Well, you forgot? How did that happen?
-I: I was sick last week, and I just haven't been myself for the last couple of weeks.
-J: Hmm... OK, I'll give you another chance this time. You can either take a make-up exam or write a research paper.
-I: Thank you very much, professor. I'll take the make-up exam.
+A: Professor, I'm so sorry, but I completely forgot about the exam date. Is there anything I can do?
+B: Well, you forgot? How did that happen?
+A: I was sick last week, and I just haven't been myself for the last couple of weeks.
+B: Hmm... OK, I'll give you another chance this time. You can either take a make-up exam or write a research paper.
+A: Thank you very much, professor. I'll take the make-up exam.
 '''
 
 

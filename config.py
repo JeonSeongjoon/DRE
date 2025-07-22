@@ -5,9 +5,9 @@ import torch
 
 #8bits quantization config
 bnbConfig = BitsAndBytesConfig(
-    load_in_4bit=True,
+    load_in_8bit=True,
     bnb_8bit_compute_dtype=torch.float16,
-    bnb_8bit_quant_type="nf4",
+    bnb_8bit_quant_type="fp4",
     bnb_8bit_use_double_quant=True,
 )
 
@@ -19,9 +19,9 @@ bnbConfig = BitsAndBytesConfig(
 # It is for the better performance
 
 LoRAConfig = LoraConfig(
-    r=8,                     # LoRA의 랭크
-    lora_alpha=16,           # LoRA의 알파 파라미터
-    target_modules = ["q_proj", "k_proj"], #, "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+    r=16,                     # LoRA의 랭크
+    lora_alpha=32,           # LoRA의 알파 파라미터
+    target_modules = ["q_proj", "k_proj" "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
     lora_dropout=0.05,       # LoRA의 드롭아웃 비율
     bias="none",             # 바이어스를 학습하지 않음
     task_type="CAUSAL_LM"    # 작업 유형: 인과적 언어 모델링
@@ -38,9 +38,9 @@ LoRAConfig = LoraConfig(
 trainerConfig = TrainingArguments(
     output_dir="./output",
     num_train_epochs=3,                  # 학습 에폭 수
-    per_device_train_batch_size=8,       # 배치 크기 (코랩 메모리에 맞게 조정)
+    per_device_train_batch_size=4,       # 배치 크기 (코랩 메모리에 맞게 조정)
     #per_device_eval_batch_size=2,        # 검증 배치 크기
-    gradient_accumulation_steps=2,       # 그래디언트 누적 (배치 크기를 효과적으로 늘림)
+    gradient_accumulation_steps=4,       # 그래디언트 누적 (배치 크기를 효과적으로 늘림)
     #eval_strategy="steps",               # 검증 전략
     #eval_steps=100,                      # 검증 간격
     save_steps=50,                       # 체크포인트 저장 간격

@@ -20,47 +20,51 @@ def loadnSampling(file_path, num_samples=3000):
 
 
 def preprocessing(examples, prompt, tokenizer):
-    inputs = []
-    targets = []
+    input_texts = []
+    full_texts = []
 
     for en_text, ko_text in zip(examples["English"], examples["Korean"]):
-
         messages = [
             {"role": "system", "content": prompt},
-            {"role": "user", "content": en_text}
+            {"role": "user", "content": f"English: \n{en_text}"}
         ]
 
-        model_inputs = tokenizer.apply_chat_template(
+        input_text = tokenizer.apply_chat_template(
             messages,
             tokenize=False,
-            add_generation_prompt=False              ### False로 처음 돌려보기
+            add_generation_prompt=False
         )
 
-        inputs.append(model_inputs)
-        targets.append(ko_text)
+        full_text = input_text + "\n\nKorean:\n" + ko_text
 
+        input_texts.append(input_text)
+        full_texts.append(full_text)
 
-    # Tokenize
+    # model input = full text
     model_inputs = tokenizer(
-        inputs,
+        full_texts,
+        max_length=512,
         padding="max_length",
         truncation=True,
-        max_length=1024,
         return_tensors="pt"
     )
+    
+    # model label = texts maksing the input text part from full_text
+    input_tokenized = tokenizer(
+        input_texts,
+        max_length=512,
+        truncation=True,
+        add_special_tokens=False
+    )
 
-    # Set labels
-    with tokenizer.as_target_tokenizer():
-        labels = tokenizer(
-            targets,
-            padding="max_length",
-            truncation=True,
-            max_length=1024,
-            return_tensors="pt"
-        )["input_ids"]
+    labels = model_inputs["input_ids"].clone()
 
+    for i, input_ids in enumerate(input_tokenized["input_ids"]):
+        input_len = len(input_ids)
+        labels[i, :input_len] = -100
 
     model_inputs["labels"] = labels
+
 
     return model_inputs
 

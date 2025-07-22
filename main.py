@@ -20,8 +20,8 @@ from preprocessing_FT import loadnSampling, preprocessing
 MODEL_NAME = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
 OUTPUT_DIR = "./ouput"                                          
 LORA_DIR = "./LoRA"                   
-DATASET_PATH = "./data/AI_hub_conversation_data(session).xlsx"
 FILE_VER = 'session'
+DATASET_PATH = f"./data/AI_hub_conversation_data({FILE_VER}).xlsx"
 
 #prompt
 PROMPT = '''

@@ -13,10 +13,15 @@ bnbConfig = BitsAndBytesConfig(
 
 
 #LoRA config
+
+# changed the rank of LoRA
+# changed the target_modules to include qkvo of attention and ffn layers to fine-tuning
+# It is for the better performance
+
 LoRAConfig = LoraConfig(
-    r=8,                     # LoRA의 랭크
+    r=16,                     # LoRA의 랭크
     lora_alpha=32,           # LoRA의 알파 파라미터
-    target_modules = ["q_proj", "k_proj"],  #, "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+    target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
     lora_dropout=0.05,       # LoRA의 드롭아웃 비율
     bias="none",             # 바이어스를 학습하지 않음
     task_type="CAUSAL_LM"    # 작업 유형: 인과적 언어 모델링
@@ -24,14 +29,23 @@ LoRAConfig = LoraConfig(
 
 
 #Trainer config
+
+# For the stable fine-tuning 
+# changed the batch_size and gradient acc steps
+# add the evaluation process
+# lower the learning rate considering the transfer learning(fine-tuning)
+
 trainerConfig = TrainingArguments(
-    output_dir="./ouput",
+    output_dir="./output",
     num_train_epochs=3,                  # 학습 에폭 수
-    per_device_train_batch_size=1,       # 배치 크기 (코랩 메모리에 맞게 조정)   ##2 or 4
-    gradient_accumulation_steps=8,       # 그래디언트 누적 (배치 크기를 효과적으로 늘림)
+    per_device_train_batch_size=8,       # 배치 크기 (코랩 메모리에 맞게 조정)
+    per_device_eval_batch_size=2,        # 검증 배치 크기
+    gradient_accumulation_steps=2,       # 그래디언트 누적 (배치 크기를 효과적으로 늘림)
+    evaluation_strategy="steps",         # 검증 전략
+    eval_steps=100,                       # 검증 간격
     save_steps=50,                       # 체크포인트 저장 간격
     logging_steps=10,                    # 로깅 간격
-    learning_rate=2e-4,                  # 학습률
+    learning_rate=5e-5,                  # 학습률
     weight_decay=0.001,                  # 가중치 감쇠
     fp16=True,                           # 16비트 부동소수점 사용
     bf16=False,                          # bfloat16 사용하지 않음

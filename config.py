@@ -19,8 +19,8 @@ bnbConfig = BitsAndBytesConfig(
 # It is for the better performance
 
 LoRAConfig = LoraConfig(
-    r=16,                     # LoRA의 랭크
-    lora_alpha=32,           # LoRA의 알파 파라미터
+    r=8,                     # LoRA의 랭크
+    lora_alpha=16,           # LoRA의 알파 파라미터
     target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
     lora_dropout=0.05,       # LoRA의 드롭아웃 비율
     bias="none",             # 바이어스를 학습하지 않음

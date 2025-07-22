@@ -5,9 +5,9 @@ import torch
 
 #8bits quantization config
 bnbConfig = BitsAndBytesConfig(
-    load_in_8bit=True,
+    load_in_4bit=True,
     bnb_8bit_compute_dtype=torch.float16,
-    bnb_8bit_quant_type="fp4",
+    bnb_8bit_quant_type="nf4",
     bnb_8bit_use_double_quant=True,
 )
 

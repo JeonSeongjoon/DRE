@@ -46,7 +46,7 @@ tokenizer.pad_token_id = tokenizer.eos_token_id
 tokenizer.padding_side = "right"
 
 #LoRA
-model = prepare_model_for_kbit_training(base_model, use_use_gradient_checkpointing=False)
+model = prepare_model_for_kbit_training(base_model, use_gradient_checkpointing=False)
 model = get_peft_model(model, LoRAConfig)  
 
 

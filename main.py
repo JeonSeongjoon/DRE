@@ -29,7 +29,7 @@ You are a competent translator. Translate the following english dialogue into Ko
 You should output the translation result of the input data. Do not include any other contents.'''   #zero-shot
 
 
-####################################################################################################
+############################################# Model ####################################################
 
 
 #Model
@@ -49,6 +49,8 @@ tokenizer.padding_side = "right"
 model = prepare_model_for_kbit_training(base_model)
 model = get_peft_model(model, LoRAConfig)  
 
+
+#########################################Fine-tuning#################################################
 
 
 #FT_data loading & sampling
@@ -75,14 +77,6 @@ trainer = SFTTrainer(
 trainer.train()
 trainer.model.save_pretrained(LORA_DIR)
 
-
-#######################################################################################################
-
-model = PeftModel.from_pretrained(
-    base_model,
-    LORA_DIR,
-    device_map='auto'
-)
 
 ##########################################Implementation###############################################
 

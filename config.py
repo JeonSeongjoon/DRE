@@ -7,7 +7,7 @@ import torch
 bnbConfig = BitsAndBytesConfig(
     load_in_8bit=True,
     bnb_8bit_compute_dtype=torch.float16,
-    bnb_8bit_quant_type="nf4",
+    bnb_8bit_quant_type="fp4",
     bnb_8bit_use_double_quant=True,
 )
 
@@ -41,7 +41,7 @@ trainerConfig = TrainingArguments(
     per_device_train_batch_size=8,       # 배치 크기 (코랩 메모리에 맞게 조정)
     per_device_eval_batch_size=2,        # 검증 배치 크기
     gradient_accumulation_steps=2,       # 그래디언트 누적 (배치 크기를 효과적으로 늘림)
-    evaluation_strategy="steps",         # 검증 전략
+    eval_strategy="steps",         # 검증 전략
     eval_steps=100,                       # 검증 간격
     save_steps=50,                       # 체크포인트 저장 간격
     logging_steps=10,                    # 로깅 간격

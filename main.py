@@ -64,7 +64,7 @@ dataset = data.map(
     remove_columns=data.column_names
 )
 
-dataset_splitted = dataset.train_test_split(test_size = 0.2, random_state=42)
+dataset_splitted = dataset.train_test_split(test_size = 0.2, seed=42)
 train_dataset = dataset_splitted['train']
 eval_dataset = dataset_splitted['test']
 

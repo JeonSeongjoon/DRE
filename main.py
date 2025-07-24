@@ -1,13 +1,13 @@
 import os
 import torch
 import pandas as pd
-from datasets import Dataset, load_dataset
+from datasets import Dataset
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer
 )
 
-from peft import PeftModel, get_peft_model, prepare_model_for_kbit_training
+from peft import get_peft_model, prepare_model_for_kbit_training
 from trl import SFTTrainer
 
 from config import bnbConfig, LoRAConfig, trainerConfig
@@ -31,7 +31,6 @@ You should output the translation result of the input data. Do not include any o
 
 ############################################# Model ####################################################
 
-
 #Model
 base_model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
@@ -43,34 +42,38 @@ base_model = AutoModelForCausalLM.from_pretrained(
 #tokenizer
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 tokenizer.pad_token_id = tokenizer.eos_token_id
-tokenizer.padding_side = "right"
+tokenizer.padding_side = "left"
 
 #LoRA
 model = prepare_model_for_kbit_training(base_model, use_gradient_checkpointing=False)
 model = get_peft_model(model, LoRAConfig)  
 
 
+
 #########################################Fine-tuning#################################################
 
-
 #FT_data loading & sampling
-num_samples = 3000  
-dataset = loadnSampling(DATASET_PATH, num_samples=num_samples)
+num_samples = 300
+data = loadnSampling(DATASET_PATH, num_samples=num_samples)
 
 #FT_preprocessing
-dataset = Dataset.from_pandas(dataset)
-
-tokenized_dataset = dataset.map(
+data = Dataset.from_pandas(data)
+dataset = data.map(
     lambda x: preprocessing(x, prompt = PROMPT, tokenizer=tokenizer),
     batched=True,
-    remove_columns=dataset.column_names
+    remove_columns=data.column_names
 )
+
+dataset_splitted = dataset.train_test_split(test_size = 0.2, random_state=42)
+train_dataset = dataset_splitted['train']
+eval_dataset = dataset_splitted['test']
 
 #FT_trainer initialization
 trainer = SFTTrainer(
     model=model,
     args=trainerConfig,
-    train_dataset=tokenized_dataset,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset
 )
 
 #FT
@@ -78,8 +81,8 @@ trainer.train()
 trainer.model.save_pretrained(LORA_DIR)
 
 
-##########################################Implementation###############################################
 
+##########################################Implementation###############################################
 
 def translation(context):
     with torch.no_grad():

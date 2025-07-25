@@ -56,5 +56,5 @@ trainerConfig = TrainingArguments(
     lr_scheduler_type="cosine",          # 학습률 스케줄러 유형
     save_total_limit=3,                  # 최대 체크포인트 저장 수
     push_to_hub=False,                   # 허깅페이스 허브에 모델 업로드 (False)
-    report_to="none",                    # 로그 보고 대상
+    report_to="wandb",                    # 로그 보고 대상
 )

@@ -9,6 +9,7 @@ from transformers import (
 
 from peft import get_peft_model, prepare_model_for_kbit_training
 from trl import SFTTrainer
+import wandb
 
 from config import bnbConfig, LoRAConfig, trainerConfig
 from preprocessing_FT import loadnSampling, preprocessing
@@ -28,6 +29,11 @@ PROMPT = '''
 You are a competent translator. Translate the following english dialogue into Korean.
 You should output the translation result of the input data. Do not include any other contents.'''   #zero-shot
 
+#wandb
+wandb.init(
+    project = "DRE",
+    name = "v1_#1"
+)
 
 ############################################# Model ####################################################
 
@@ -79,6 +85,8 @@ trainer = SFTTrainer(
 #FT
 trainer.train()
 trainer.model.save_pretrained(LORA_DIR)
+
+wandb.finish()
 
 
 

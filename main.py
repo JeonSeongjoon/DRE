@@ -18,7 +18,7 @@ from preprocessing_FT import loadnSampling, preprocessing
 ###################################################################################################
 
 #path info
-MODEL_NAME = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
+MODEL_NAME = "Unbabel/TowerInstruct-7B-v0.2"
 OUTPUT_DIR = "./ouput"                                          
 LORA_DIR = "./LoRA"                   
 FILE_VER = 'session'
@@ -32,7 +32,7 @@ You should output the translation result of the input data. Do not include any o
 #wandb
 wandb.init(
     project = "DRE",
-    name = "v1_#1"
+    name = "TI_#1"
 )
 
 ############################################# Model ####################################################
@@ -59,7 +59,7 @@ model = get_peft_model(model, LoRAConfig)
 #########################################Fine-tuning#################################################
 
 #FT_data loading & sampling
-num_samples = 300
+num_samples = 3000
 data = loadnSampling(DATASET_PATH, num_samples=num_samples)
 
 #FT_preprocessing
@@ -111,12 +111,12 @@ def translation(context):
 
         full_output = tokenizer.decode(output[0], skip_special_tokens=True)
 
-        # "Korean:" 이후의 텍스트만 추출
+        #print the translation result only
         korean_prefix = "Korean:"
         korean_start = full_output.find(korean_prefix)
+
         if korean_start != -1:
             return full_output[korean_start + len(korean_prefix):].strip()
-
         return full_output[len(prompt):].strip()
     
 

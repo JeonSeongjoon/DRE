@@ -57,7 +57,7 @@ model = get_peft_model(model, LoRAConfig)
 #########################################Fine-tuning#################################################
 
 #FT_data loading & sampling
-num_samples = 300
+num_samples = 3000
 data = loadnSampling(DATASET_PATH, num_samples=num_samples)
 
 #FT_preprocessing

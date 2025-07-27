@@ -35,7 +35,7 @@ def preprocessing(examples, prompt, tokenizer):
             add_generation_prompt=False
         )
 
-        full_text = input_text + "\n\nKorean:\n" + ko_text
+        full_text = input_text + "[END]\n\nKorean:\n" + ko_text + "[END]"
 
         input_texts.append(input_text)
         full_texts.append(full_text)

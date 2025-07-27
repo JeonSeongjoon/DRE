@@ -25,9 +25,7 @@ FILE_VER = 'session'
 DATASET_PATH = f"./data/AI_hub_conversation_data({FILE_VER}).xlsx"
 
 #prompt
-PROMPT = '''
-You are a competent translator. Translate the following english dialogue into Korean.
-You should output the translation result of the input data. Do not include any other contents.'''   #zero-shot
+PROMPT = '''You are a competent translator. Translate the following english dialogue into Korean. You should output the translation result of the input data. Do not include any other contents.'''   #zero-shot
 
 #wandb
 wandb.init(
@@ -59,7 +57,7 @@ model = get_peft_model(model, LoRAConfig)
 #########################################Fine-tuning#################################################
 
 #FT_data loading & sampling
-num_samples = 300
+num_samples = 3000
 data = loadnSampling(DATASET_PATH, num_samples=num_samples)
 
 #FT_preprocessing
@@ -111,12 +109,12 @@ def translation(context):
 
         full_output = tokenizer.decode(output[0], skip_special_tokens=True)
 
-        # "Korean:" 이후의 텍스트만 추출
+        #print the translation result only
         korean_prefix = "Korean:"
         korean_start = full_output.find(korean_prefix)
+
         if korean_start != -1:
             return full_output[korean_start + len(korean_prefix):].strip()
-
         return full_output[len(prompt):].strip()
     
 
